@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flask Market — Living Animation</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background: #05060f;
+      color: #fff;
+    }
+
+    .world {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mesh {
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 20% 20%, #4facfe, transparent 40%),
+        radial-gradient(circle at 80% 30%, #00f2fe, transparent 40%),
+        radial-gradient(circle at 50% 80%, #8e2de2, transparent 40%);
+      filter: blur(80px);
+      animation: meshMove 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshMove {
+      0%   { transform: scale(1) rotate(0deg); }
+      50%  { transform: scale(1.3) rotate(40deg); }
+      100% { transform: scale(1) rotate(80deg); }
+    }
+
+    .blob {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe, #8e2de2);
+      animation: blobMorph 8s ease-in-out infinite;
+      filter: drop-shadow(0 0 80px rgba(79,172,254,0.8));
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    @keyframes blobMorph {
+      0%   { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+      25%  { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+      50%  { border-radius: 55% 45% 35% 65% / 60% 40% 60% 40%; }
+      75%  { border-radius: 35% 65% 55% 45% / 45% 55% 45% 55%; }
+      100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    }
+
+    .content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #ffffff, #a5f3ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.85;
+      margin-top: 8px;
+    }
+
+    .enter {
+      animation: liquidZoom 1.4s ease forwards !important;
+    }
+
+    @keyframes liquidZoom {
+      to {
+        transform: scale(12);
+        opacity: 0;
+      }
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 32px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      letter-spacing: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="world">
+    <div class="mesh"></div>
+
+    <div class="blob" id="blob">
+      <div class="content">
+        <h1><span>Flask Market</span></h1>
+        <p>Touch the living store</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">WELCOME TO THE STORE</div>
+
+  <!-- ✅ ENTER SOUND -->
+  <audio id="organicSound" preload="auto">
+    <source src="/static/sounds/organic_enter.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ✅ JAVASCRIPT -->
+  <script>
+    const blob = document.getElementById('blob');
+    const organicSound = document.getElementById('organicSound');
+
+    // mouse organic movement
+    document.addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      blob.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // click → sound + animation + redirect
+    blob.addEventListener('click', () => {
+      organicSound.currentTime = 0;
+      organicSound.play().catch(()=>{});
+
+      blob.classList.add('enter');
+      setTimeout(() => {
+        window.location.href = '/home';
+      }, 1200);
+    });
+
+    // back button fix
+    window.addEventListener('pageshow', () => {
+      blob.classList.remove('enter');
+      blob.style.opacity = '1';
+      blob.style.transform = 'translate(0,0)';
+    });
+  </script>
+
+</body>
+</html>

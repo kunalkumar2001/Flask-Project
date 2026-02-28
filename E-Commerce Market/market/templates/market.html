@@ -1,0 +1,456 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Flask Market
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* ================= ULTRA PREMIUM BACKGROUND ================= */
+
+.market-section{
+
+    padding:50px 40px;
+    min-height:100vh;
+    color:white;
+    position:relative;
+    overflow:hidden;
+
+}
+
+
+/* MAIN MESH LAYER */
+
+.market-section::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-30%;
+
+    z-index:-2;
+
+    background:
+
+        radial-gradient(circle at 20% 30%, #00f2fe, transparent 40%),
+
+        radial-gradient(circle at 80% 20%, #4facfe, transparent 40%),
+
+        radial-gradient(circle at 50% 80%, #00ff87, transparent 40%),
+
+        radial-gradient(circle at 30% 70%, #8e2de2, transparent 40%),
+
+        radial-gradient(circle at 70% 60%, #ff00cc, transparent 40%);
+
+    filter:blur(140px);
+
+    animation:meshMove 25s ease-in-out infinite alternate;
+
+}
+
+
+/* SECOND GLOW LAYER */
+
+.market-section::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-30%;
+
+    z-index:-3;
+
+    background:
+
+        radial-gradient(circle at 40% 40%, rgba(0,255,255,0.4), transparent 50%),
+
+        radial-gradient(circle at 60% 60%, rgba(0,255,135,0.4), transparent 50%);
+
+    filter:blur(160px);
+
+    animation:meshMoveReverse 30s ease-in-out infinite alternate;
+
+}
+
+
+/* ANIMATION */
+
+@keyframes meshMove{
+
+    0%{
+        transform:scale(1) rotate(0deg);
+    }
+
+    50%{
+        transform:scale(1.5) rotate(40deg);
+    }
+
+    100%{
+        transform:scale(1.1) rotate(80deg);
+    }
+
+}
+
+@keyframes meshMoveReverse{
+
+    0%{
+        transform:scale(1.2) rotate(0deg);
+    }
+
+    50%{
+        transform:scale(1.6) rotate(-30deg);
+    }
+
+    100%{
+        transform:scale(1.2) rotate(-60deg);
+    }
+
+}
+
+
+/* ================= TITLE ================= */
+
+.section-title{
+
+    text-align:center;
+    font-size:2.8rem;
+    font-weight:700;
+    margin-bottom:40px;
+
+    background:linear-gradient(90deg,#00f2fe,#4facfe,#00ff87,#ff00cc);
+
+    background-size:300%;
+
+    background-clip:text;
+    
+    -webkit-background-clip:text;
+
+    color:transparent;
+
+    animation:titleGlow 6s linear infinite;
+
+}
+
+@keyframes titleGlow{
+
+    0%{background-position:0%;}
+    100%{background-position:300%;}
+
+}
+
+
+/* ================= GRID ================= */
+
+.product-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:30px;
+
+}
+
+
+/* ================= CARD ================= */
+
+.product-card{
+
+    background:rgba(255,255,255,0.06);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    backdrop-filter:blur(30px);
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.5);
+
+    transition:0.4s ease;
+
+    position:relative;
+
+    text-align:center;
+
+}
+
+
+/* HOVER EFFECT */
+
+.product-card:hover{
+
+    transform:translateY(-12px) scale(1.05);
+
+    box-shadow:
+
+        0 25px 60px rgba(0,0,0,0.7),
+
+        0 0 25px rgba(0,255,255,0.3);
+
+}
+
+
+/* ================= IMAGE ================= */
+
+.product-image{
+
+    width:100%;
+
+    height:170px;
+
+    object-fit:contain;
+
+    margin-bottom:15px;
+
+    transition:0.4s;
+
+}
+
+.product-card:hover .product-image{
+
+    transform:scale(1.15) rotate(2deg);
+
+}
+
+
+/* ================= TEXT ================= */
+
+.product-name{
+
+    font-size:1.3rem;
+
+    font-weight:600;
+
+}
+
+.product-price{
+
+    font-size:1.3rem;
+
+    color:#00ff87;
+
+    font-weight:700;
+
+    margin-top:5px;
+
+}
+
+
+/* ================= BUTTONS ================= */
+
+.btn-market{
+
+    margin-top:12px;
+
+    border-radius:999px;
+
+    padding:8px 22px;
+
+    font-weight:600;
+
+    transition:0.3s;
+
+}
+
+
+/* BUTTON COLORS */
+
+.btn-info{
+
+    background:linear-gradient(90deg,#00f2fe,#4facfe);
+
+    border:none;
+
+}
+
+.btn-success{
+
+    background:linear-gradient(90deg,#00ff87,#00c853);
+
+    border:none;
+
+}
+
+.btn-danger{
+
+    background:linear-gradient(90deg,#ff416c,#ff4b2b);
+
+    border:none;
+
+}
+
+
+/* GLOW EFFECT */
+
+.btn-glow{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.btn-glow:hover{
+
+    transform:scale(1.12);
+
+    box-shadow:0 0 20px rgba(0,255,135,0.7);
+
+}
+
+.btn-glow::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-100%;
+
+    width:100%;
+
+    height:100%;
+
+    background:linear-gradient(
+
+        120deg,
+
+        transparent,
+
+        rgba(255,255,255,0.6),
+
+        transparent
+
+    );
+
+    transition:0.6s;
+
+}
+
+.btn-glow:hover::after{
+
+    left:100%;
+
+}
+
+
+/* ================= OWNED SECTION ================= */
+
+.owned-section{
+
+    margin-top:90px;
+
+    padding-top:40px;
+
+    border-top:1px solid rgba(255,255,255,0.2);
+
+}
+
+.owned-title{
+
+    font-size:2.2rem;
+
+    margin-bottom:30px;
+
+    text-align:center;
+
+}
+
+</style>
+
+
+
+<div class="market-section">
+
+<h1 class="section-title">🛒 Explore Flask Market</h1>
+
+
+
+<div class="product-grid">
+
+{% for item in items %}
+
+{% include 'includes/items_modals.html' %}
+
+<div class="product-card">
+
+<img src="{{ url_for('static', filename=item.image) if item.image else url_for('static', filename='images/default.png') }}"
+class="product-image">
+
+<div class="product-name">
+{{ item.name }}
+</div>
+
+<div>
+Barcode: {{ item.barcode }}
+</div>
+
+<div class="product-price">
+${{ item.price }}
+</div>
+
+<button class="btn btn-market btn-info btn-glow"
+data-toggle="modal"
+data-target="#Modal-MoreInfo-{{ item.id }}">
+🔍 More Info
+</button>
+
+<button class="btn btn-market btn-success btn-glow"
+data-toggle="modal"
+data-target="#Modal-PurchaseConfirm-{{ item.id }}">
+🛒 Purchase
+</button>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+
+<div class="owned-section">
+
+<h2 class="owned-title">💼 Your Owned Items</h2>
+
+<div class="product-grid">
+
+{% for owned_item in owned_items %}
+
+{% include 'includes/owned_items_modals.html' %}
+
+<div class="product-card">
+
+<img src="{{ url_for('static', filename=owned_item.image) if owned_item.image else url_for('static', filename='images/default.png') }}"
+class="product-image">
+
+<div class="product-name">
+{{ owned_item.name }}
+</div>
+
+<div class="product-price">
+${{ owned_item.price }}
+</div>
+
+<button class="btn btn-market btn-danger btn-glow"
+data-toggle="modal"
+data-target="#Modal-SellingConfirm-{{ owned_item.id }}">
+Sell Item
+</button>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
